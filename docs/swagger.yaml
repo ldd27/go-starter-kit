@@ -1,0 +1,245 @@
+basePath: /api/v1
+consumes:
+- application/json
+definitions:
+  types.CreateExampleReq:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  types.CursorPageRes:
+    properties:
+      data: {}
+      next_cursor:
+        type: integer
+    type: object
+  types.DeleteExampleReq:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  types.Example:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  types.PageRes:
+    properties:
+      data: {}
+      total:
+        type: integer
+    type: object
+  types.Res:
+    properties:
+      data: {}
+      err_code:
+        type: integer
+      err_msg:
+        type: string
+      success:
+        type: boolean
+    type: object
+  types.UpdateExampleReq:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: go-start-kit
+  title: go-start-kit
+  version: "1.0"
+paths:
+  /example:
+    delete:
+      description: 删除example
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.DeleteExampleReq'
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - BearerToken: []
+      summary: 删除example
+      tags:
+      - example
+    get:
+      description: 获取example列表
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.Example'
+                  type: array
+              type: object
+      security:
+      - BearerToken: []
+      summary: 获取example列表
+      tags:
+      - example
+    post:
+      description: 创建example
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.CreateExampleReq'
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - BearerToken: []
+      summary: 创建example
+      tags:
+      - example
+    put:
+      description: 编辑example
+      parameters:
+      - description: request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.UpdateExampleReq'
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  type: object
+              type: object
+      security:
+      - BearerToken: []
+      summary: 编辑example
+      tags:
+      - example
+  /example/cursor:
+    get:
+      description: 根据cursor分页获取example列表
+      parameters:
+      - in: query
+        minimum: 0
+        name: cursor
+        type: integer
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/types.CursorPageRes'
+                  - properties:
+                      data:
+                        items:
+                          $ref: '#/definitions/types.Example'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - BearerToken: []
+      summary: 根据cursor分页获取example列表
+      tags:
+      - example
+  /example/page:
+    get:
+      description: 分页获取example列表
+      parameters:
+      - in: query
+        name: page_index
+        required: true
+        type: integer
+      - in: query
+        name: page_size
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: response
+          schema:
+            allOf:
+            - $ref: '#/definitions/types.Res'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/types.PageRes'
+                  - properties:
+                      data:
+                        items:
+                          $ref: '#/definitions/types.Example'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - BearerToken: []
+      summary: 分页获取example列表
+      tags:
+      - example
+  /health:
+    get:
+      description: 返回服务是否健康的状态信息
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - BearerToken: []
+      summary: 检查服务健康状态
+      tags:
+      - 健康检查
+produces:
+- application/json
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerToken:
+    description: JWT授权 格式：Bearer {token} 即可，注意两者之间有空格
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,8 @@
+debug = true
+
+[server]
+enable_swagger = true
+
+[db]
+dsn = "postgres://postgres:postgres@localhost/go-starter-kit?sslmode=disable"
+log_level = "debug"
